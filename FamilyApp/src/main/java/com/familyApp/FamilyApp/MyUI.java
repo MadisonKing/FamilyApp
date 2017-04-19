@@ -35,6 +35,10 @@ import com.vaadin.ui.Window;
 @Theme("mytheme")
 public class MyUI extends UI {
 
+	/*
+	 * 
+	 * This comment block is my test to see if my changes have been made in GitHub
+	 */
 	WelcomeWindow welcomeWindow = new WelcomeWindow();
 	CreateUserWindow newUserWindow = new CreateUserWindow();
 	LoginWindow loginWindow = new LoginWindow();
