@@ -37,7 +37,7 @@ public class MyUI extends UI {
 
 	/*
 	 * 
-	 * This comment block is my test to see if my changes have been made in GitHub
+	 * This comment is the 2nd block to see if my changes have been made in GitHub
 	 */
 	WelcomeWindow welcomeWindow = new WelcomeWindow();
 	CreateUserWindow newUserWindow = new CreateUserWindow();
