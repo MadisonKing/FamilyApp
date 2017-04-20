@@ -70,6 +70,17 @@ public class UserProfileLayout extends HorizontalLayout {
 		return addFamily;
 	}
 
+	
+
+
+	/**
+	 * @return the menu
+	 */
+	public MenuLayout getMenu() {
+		return menu;
+	}
+
+
 
 
 	public class FamiliesBtnListener implements ClickListener {

@@ -66,6 +66,7 @@ public class MyUI extends UI {
         
         
         
+        
         // TEST: layout.addComponent(new NewsBoard()); (passed)
         // TEST: layout.addComponent(new MenuLayout()); (passed)
         // TEST:  User tempUser = new User("madisontking@yahoo.com", "Madison", "King"); (passed)
@@ -292,6 +293,7 @@ public class MyUI extends UI {
 				// Create account
 				User user = new User(newUserWindow.getEmail().getValue(), newUserWindow.getFirst().getValue(), newUserWindow.getLast().getValue());
 				updateUserDataBase(user);
+				newUserWindow.resetValues();
 			}
 		}
     	
@@ -312,6 +314,8 @@ public class MyUI extends UI {
 				UserProfileLayout userProfile = new UserProfileLayout(users.get(findUser(email)));
 				currentWindow.close();
 				setContent(userProfile);
+				userProfile.getMenu().getLogout().addClickListener(new LogoutBtnListener());
+				loginWindow.resetValues();
 				//layout.addComponent(userProfile);
 			}
 			else {
@@ -363,6 +367,18 @@ public class MyUI extends UI {
 			// TODO Auto-generated method stub
 			addWindow(backWindow);
 			//currentWindow = backWindow;
+		}
+    	
+    }
+    
+    public class LogoutBtnListener implements ClickListener {
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			addWindow(welcomeWindow);
+			currentWindow = welcomeWindow;
+			setContent(new VerticalLayout());
 		}
     	
     }

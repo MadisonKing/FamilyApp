@@ -61,6 +61,15 @@ public class FamilyProfileLayout extends HorizontalLayout{
 		membersGrid.setVisible(false);
 	}
 	
+
+	/**
+	 * @return the menu
+	 */
+	public MenuLayout getMenu() {
+		return menu;
+	}
+
+	
 	public class MembersBtnListener implements ClickListener {
 
 		@Override
