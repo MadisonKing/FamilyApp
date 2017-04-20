@@ -27,6 +27,7 @@ public class News {
 	public News() {
 		super();
 		this.content = "";
+		this.owner = new User();
 	}
 
 	/**
