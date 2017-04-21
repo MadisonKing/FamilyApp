@@ -44,9 +44,11 @@ public class MyUI extends UI {
 	LoginWindow loginWindow = new LoginWindow();
 	BackWindow backWindow = new BackWindow();
 	HelpWindow helpWindow = new HelpWindow();
+	User currentUser = new User();
 	Window currentWindow; // This value is to keep track of our current window that is open
 	Window previousWindow; // This value is to keep track of the previous window that we would want to go back to 
 	ArrayList<User> users = new ArrayList<User>();
+	SettingsWindow settingsWindow = new SettingsWindow(currentUser);
 	//UserProfileLayout userProfile;
 	
     @Override
@@ -63,7 +65,6 @@ public class MyUI extends UI {
         loginWindow.getBack().addClickListener(new BackBtnListener());
         loginWindow.getLogin().addClickListener(new LoginBtnListener());
         newUserWindow.getCreate().addClickListener(new CreateAccountBtnListener());
-        
         
         
         
@@ -243,6 +244,20 @@ public class MyUI extends UI {
     	currentWindow = loginWindow;
     }
     
+    public void addUserProfileListeners(UserProfileLayout userProfile)
+    {
+    	//userProfile.getMenu().getHelp().addClickListener(new HelpBtnListener());
+    	userProfile.getMenu().getSettings().addClickListener(new SettingsBtnListener());
+    	userProfile.getMenu().getUserProfile().addClickListener(new MyProfileBtnListener());
+    	userProfile.getMenu().getLogout().addClickListener(new LogoutBtnListener());
+    }
+    
+    public void addSettingsWindowListeners(SettingsWindow settingsWindow)
+    {
+    	settingsWindow.getBack().addClickListener(new SettingsBackBtnListener());
+        settingsWindow.getSave().addClickListener(new SaveChangesBtnListener());
+    }
+    
     public int findUser(String string)
     {
     	int index = -1;
@@ -267,13 +282,18 @@ public class MyUI extends UI {
 			// TODO Auto-generated method stub
 			backWindow.close();
 			currentWindow.close();
-			currentWindow = previousWindow;
-			if(previousWindow.equals(newUserWindow) || previousWindow.equals(loginWindow))
-			{
-				previousWindow = welcomeWindow;
+			getContent().setEnabled(true);
+			if(!currentWindow.equals(settingsWindow)) {
+
+
+				currentWindow = previousWindow;
+				if(previousWindow.equals(newUserWindow) || previousWindow.equals(loginWindow))
+				{
+					previousWindow = welcomeWindow;
+				}
+
+				addWindow(previousWindow);
 			}
-			addWindow(previousWindow);
-			
 		}
     	
     }
@@ -314,7 +334,8 @@ public class MyUI extends UI {
 				UserProfileLayout userProfile = new UserProfileLayout(users.get(findUser(email)));
 				currentWindow.close();
 				setContent(userProfile);
-				userProfile.getMenu().getLogout().addClickListener(new LogoutBtnListener());
+				addUserProfileListeners(userProfile);
+				currentUser = users.get(findUser(email));
 				loginWindow.resetValues();
 				//layout.addComponent(userProfile);
 			}
@@ -366,6 +387,7 @@ public class MyUI extends UI {
 		public void buttonClick(ClickEvent event) {
 			// TODO Auto-generated method stub
 			addWindow(backWindow);
+			getContent().setEnabled(false);
 			//currentWindow = backWindow;
 		}
     	
@@ -382,5 +404,69 @@ public class MyUI extends UI {
 		}
     	
     }
+    
+    public class MyProfileBtnListener implements ClickListener {
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			UserProfileLayout userProfile = new UserProfileLayout(currentUser);
+			addUserProfileListeners(userProfile);
+			setContent(userProfile);
+			
+		}
+    }
+    
+    public class SettingsBtnListener implements ClickListener {
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			settingsWindow = new SettingsWindow(currentUser);
+			currentWindow = settingsWindow;
+			getContent().setEnabled(false);
+			addSettingsWindowListeners(settingsWindow);
+			addWindow(settingsWindow);
+		}
+    	
+    }
+    
+    public class SaveChangesBtnListener implements ClickListener{
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			currentUser = settingsWindow.getUser();
+			getContent().setEnabled(true);
+		}
+    	
+    }
+	public class SettingsBackBtnListener implements ClickListener {
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			//addWindow(backWindow);
+			addWindow(backWindow);
+			//settingsWindow.close();
+			getContent().setEnabled(true);
+		}
+		
+	}
+
+	
+	public class HelpBtnListener implements ClickListener {
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			//currentWindow = helpWindow;
+			//addWindow(helpWindow);
+		//	getContent().setEnabled(false);
+		}
+		
+	}
+    
+    
 
 }
