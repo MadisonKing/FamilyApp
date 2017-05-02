@@ -129,6 +129,10 @@ public class User {
 	public ArrayList<Pin> getFamilies() {
 		return families;
 	}
+	
+	public void addFamily(Pin family){
+		families.add(family);
+	}
 
 
 	/**

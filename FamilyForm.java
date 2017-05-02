@@ -13,39 +13,34 @@ import com.vaadin.ui.Window;
 public class FamilyForm extends VerticalLayout{
 	
 	
-	
-
-	private TextField familyName= new TextField("Enter family name");
-	
+		
 	private TextField familyPin= new TextField("Enter family pin");
-	
 	
 	private Button confirm= new Button("Join");
 	
+	Family family=new Family();
 	
-	private Button back = new Button("Back");
+
 	
 	
 	
 	private User user;
 	
 	
-	public FamilyForm(){
+	public FamilyForm(User user){
+		this.user=user;
 		initLayout();
 	}
 	
 	private void initLayout(){
 		setSizeUndefined();
 		HorizontalLayout buttons= new HorizontalLayout();
-		buttons.addComponents(confirm, back);
-		addComponents(familyName, familyPin, buttons);
+		buttons.addComponents(confirm);
+		addComponents( familyPin, buttons);
+		confirm.addClickListener(new AddConfirmBtnListener());
 	}
 	
-	
-	public TextField getFamilyName(){
-		return familyName;
-	}
-	
+
 	public int getFamilyPin(){
 		String temp=familyPin.getValue();
 		return Integer.parseInt(temp);
@@ -54,11 +49,6 @@ public class FamilyForm extends VerticalLayout{
 	public Button getConfirm(){
 		return confirm;
 	}
-	
-	public Button getBack(){
-		return back;
-	}
-	
 	
 	
 	public void setUser(User user){
@@ -70,10 +60,29 @@ public class FamilyForm extends VerticalLayout{
 	}
 	
 	public void resetValues(){
-		familyName.setValue("");
+		familyPin.setValue("");
 	}
 	
 
+	
+	public class AddConfirmBtnListener implements ClickListener {
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			
+			if(user.getFamilies().contains(familyPin)){
+				family.addUser(user);
+				familyPin.setValue("Added to family");
+			}
+			else{
+				familyPin.setValue("Family pin not found");
+			}
+			
+			
+		}
+		
+	}
 	
 	
 	

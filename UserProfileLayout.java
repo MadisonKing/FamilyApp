@@ -1,5 +1,9 @@
 package com.familyApp.FamilyApp;
 
+
+
+import java.util.List;
+
 import com.familyApp.FamilyApp.MyUI.BackBtnListener;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -26,10 +30,11 @@ public class UserProfileLayout extends HorizontalLayout {
 
 	private User user;
 	
-
+	protected List<Family> fams;
+	
 	private Button families = new Button("View Families");
 
-	private Grid<Family> familiesGrid = new Grid<>(Family.class);
+	protected Grid<Family> familiesGrid = new Grid<>(Family.class);
 
 	private Button addFamily = new Button("Add Family");
 	
@@ -39,9 +44,9 @@ public class UserProfileLayout extends HorizontalLayout {
 
 	VerticalLayout layout = new VerticalLayout();
 	
-	CreateFamilyWindow newFamilyWindow= new CreateFamilyWindow();
+	CreateFamilyWindow newFamilyWindow= new CreateFamilyWindow(user, this);
 	
-	FamilyForm newFamilyForm= new FamilyForm();
+	FamilyForm newFamilyForm= new FamilyForm(user);
 
 
 
@@ -92,6 +97,13 @@ public class UserProfileLayout extends HorizontalLayout {
 	}
 
 
+	public List<Family> getFams(){
+		return fams;
+	}
+	
+	public void addFam(Family fam){
+		fams.add(fam);
+	}
 
 
 	/**
@@ -101,6 +113,10 @@ public class UserProfileLayout extends HorizontalLayout {
 		return menu;
 	}
 
+	
+	public void setGrid(List<Family> list){
+		familiesGrid.setItems(list);
+	}
 
 
 
@@ -109,6 +125,8 @@ public class UserProfileLayout extends HorizontalLayout {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			// TODO Auto-generated method stub
+			newFamilyWindow.setVisible(false);
+			newFamilyForm.setVisible(false);
 			familiesGrid.setVisible(true);
 			hideFamily.setVisible(true);
 			addFamily.setVisible(true);

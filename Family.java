@@ -19,8 +19,6 @@ public class Family {
 	/** Pin number associated to each family*/
 	private Pin pin;
 	
-	/**image on family's profile */
-	private Image profileImg;
 	
 	
 	
@@ -32,7 +30,6 @@ public class Family {
 	//	this.pin = (int) Math.random();
 		this.name = "";
 		this.users = new ArrayList<User>();
-		this.profileImg = new Image();
 	}
 
 	/**
@@ -97,6 +94,10 @@ public class Family {
 	public void setUsers(ArrayList<User> users) {
 		this.users = users;
 	}
+	
+	public void addUser(User user){
+		users.add(user);
+	}
 
 	/**
 	 * @return the pin
@@ -112,19 +113,7 @@ public class Family {
 		this.pin = pin;
 	}
 
-	/**
-	 * @return the profileImg
-	 */
-	public Image getProfileImg() {
-		return profileImg;
-	}
 
-	/**
-	 * @param profileImg the profileImg to set
-	 */
-	public void setProfileImg(Image profileImg) {
-		this.profileImg = profileImg;
-	}
 	
 	public void display(){
 		System.out.println(name);

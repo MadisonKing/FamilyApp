@@ -1,6 +1,8 @@
 package com.familyApp.FamilyApp;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
@@ -23,16 +25,21 @@ public class CreateFamilyWindow extends VerticalLayout{
 	TextField familyName = new TextField("Please enter the name of the family");
 	
 	/** Confirms creation of account */
-	Button create = new Button("Create account");
+	Button create = new Button("Create family");
 	
-	/**button to go back if user desires to exit the current window */
-	Button back = new Button("Back");
+	UserProfileLayout layout;
+	
+	User user;
+	
+	Family family;	
+	
 	
 	
 	Label pinReveal;
 	
-	public CreateFamilyWindow() {
-		
+	public CreateFamilyWindow(User user, UserProfileLayout layout) {
+		this.user=user;
+		this.layout=layout;
 		initLayout();
 	}
 
@@ -40,8 +47,9 @@ public class CreateFamilyWindow extends VerticalLayout{
 		// TODO Auto-generated method stub
 		
 		HorizontalLayout buttons = new HorizontalLayout();
-		buttons.addComponents(create, back);
+		buttons.addComponents(create);
 		addComponents(familyName, buttons);
+		create.addClickListener(new CreateBtnListener());
 		
 		
 		//Pin pin= new Pin(familyName.getValue());
@@ -62,15 +70,11 @@ public class CreateFamilyWindow extends VerticalLayout{
 	public Button getCreate() {
 		return create;
 	}
-
-	/**
-	 * @return the back
-	 */
-	public Button getBack() {
-		return back;
+	
+	public Family getFamily(){
+		return family;
 	}
 
-	
 
 	/**
 	 * @return the pinReveal
@@ -83,6 +87,19 @@ public class CreateFamilyWindow extends VerticalLayout{
 	public void resetValues(){
 		familyName.setValue("");
 		pinReveal.setValue("");
+		
+	}
+	
+	public class CreateBtnListener implements ClickListener {
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			Pin pin= new Pin(familyName.getValue());
+			family= new Family(familyName.getValue(), pin);
+			layout.addFam(family);
+			layout.setGrid(layout.getFams());
+		}
 		
 	}
 	
