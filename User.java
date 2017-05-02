@@ -1,6 +1,7 @@
 package com.familyApp.FamilyApp;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represents a user object
@@ -20,7 +21,11 @@ public class User {
 	private String lastName;
 	
 	/** List of families that user belongs to */
-	private ArrayList<Pin> families = new ArrayList<Pin>();
+	protected ArrayList<Pin> families = new ArrayList<Pin>();
+	
+	
+	protected ArrayList<Family> familys= new ArrayList<Family>();
+	
 	
 	/**
 	 * Empty constructor
@@ -129,10 +134,11 @@ public class User {
 	public ArrayList<Pin> getFamilies() {
 		return families;
 	}
-	
-	public void addFamily(Pin family){
-		families.add(family);
+
+	public ArrayList<Family> getFamilys(){
+		return familys;
 	}
+
 
 
 	/**

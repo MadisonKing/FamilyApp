@@ -9,10 +9,10 @@ package com.familyApp.FamilyApp;
 public class Pin {
 	
 	/**integer to represent the pin number */
-	private int pinNumber;
+	protected int pinNumber;
 	
 	/**family that is attached to pin number */
-	private Family family;
+	protected Family family;
 
 	/**
 	 * empty constructor that generates pin

@@ -1,5 +1,8 @@
 package com.familyApp.FamilyApp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -31,7 +34,7 @@ public class CreateFamilyWindow extends VerticalLayout{
 	
 	User user;
 	
-	Family family;	
+	
 	
 	
 	
@@ -52,8 +55,7 @@ public class CreateFamilyWindow extends VerticalLayout{
 		create.addClickListener(new CreateBtnListener());
 		
 		
-		//Pin pin= new Pin(familyName.getValue());
-		//pinReveal.setCaption(Integer.toString(pin.getPinNumber()));
+
 		
 	}
 
@@ -71,9 +73,6 @@ public class CreateFamilyWindow extends VerticalLayout{
 		return create;
 	}
 	
-	public Family getFamily(){
-		return family;
-	}
 
 
 	/**
@@ -82,6 +81,7 @@ public class CreateFamilyWindow extends VerticalLayout{
 	public Label getPinReveal() {
 		return pinReveal;
 	}
+
 	
 
 	public void resetValues(){
@@ -96,9 +96,10 @@ public class CreateFamilyWindow extends VerticalLayout{
 		public void buttonClick(ClickEvent event) {
 			// TODO Auto-generated method stub
 			Pin pin= new Pin(familyName.getValue());
-			family= new Family(familyName.getValue(), pin);
-			layout.addFam(family);
-			layout.setGrid(layout.getFams());
+			Family family= new Family(familyName.getValue(), pin);
+			user.families.add(pin);
+			user.familys.add(family);
+			
 		}
 		
 	}

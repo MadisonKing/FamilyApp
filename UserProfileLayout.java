@@ -2,6 +2,7 @@ package com.familyApp.FamilyApp;
 
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.familyApp.FamilyApp.MyUI.BackBtnListener;
@@ -30,7 +31,6 @@ public class UserProfileLayout extends HorizontalLayout {
 
 	private User user;
 	
-	protected List<Family> fams;
 	
 	private Button families = new Button("View Families");
 
@@ -97,13 +97,6 @@ public class UserProfileLayout extends HorizontalLayout {
 	}
 
 
-	public List<Family> getFams(){
-		return fams;
-	}
-	
-	public void addFam(Family fam){
-		fams.add(fam);
-	}
 
 
 	/**
@@ -131,6 +124,7 @@ public class UserProfileLayout extends HorizontalLayout {
 			hideFamily.setVisible(true);
 			addFamily.setVisible(true);
 			joinFamily.setVisible(true);
+			familiesGrid.setItems(user.getFamilys());
 		}
 
 	}
