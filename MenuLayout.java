@@ -27,10 +27,12 @@ public class MenuLayout extends VerticalLayout {
 	
 	private Button families = new Button("Families");
 	
+	private Button blog= new Button("Blog");
+	
 	private Button settings = new Button("Settings");
 	
 	public MenuLayout(){
-		addComponents(label, userProfile, families, settings, help, logout);
+		addComponents(label, userProfile, blog, families, settings, help, logout);
 		
 	}
 
@@ -63,6 +65,14 @@ public class MenuLayout extends VerticalLayout {
 	public Button getUserProfile() {
 		return userProfile;
 	}
+	
+	/**
+	 * 
+	 * @return the blog
+	 */
+	public Button getBlog(){
+		return blog;
+	}
 
 	/**
 	 * @return the families
@@ -81,5 +91,3 @@ public class MenuLayout extends VerticalLayout {
 
 
 }
-
-

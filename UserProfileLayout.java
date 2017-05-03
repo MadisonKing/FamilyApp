@@ -47,6 +47,8 @@ public class UserProfileLayout extends HorizontalLayout {
 	CreateFamilyWindow newFamilyWindow= new CreateFamilyWindow(user);
 	
 	FamilyForm newFamilyForm= new FamilyForm(user);
+	
+	NewsLayout news= new NewsLayout(user);
 
 
 
@@ -63,10 +65,11 @@ public class UserProfileLayout extends HorizontalLayout {
 		hideFamily.setVisible(false);
 		addFamily.setVisible(false);
 		joinFamily.setVisible(false);
-		layout.addComponents(userName, buttons, familiesGrid, newFamilyWindow, newFamilyForm);
+		layout.addComponents(userName, buttons, familiesGrid, newFamilyWindow, newFamilyForm, news);
 		userName.setValue(user.getFirstName() + '\n' + user.getLastName() + '\n' + user.getEmail());
 		addComponents(menu, layout);
 		familiesGrid.setVisible(false);
+		news.setVisible(false);
 		newFamilyWindow.setVisible(false);
 		newFamilyForm.setVisible(false);
 		familiesGrid.setData(user.getFamilies());
@@ -85,6 +88,7 @@ public class UserProfileLayout extends HorizontalLayout {
 		joinFamily.setVisible(false);
 		newFamilyWindow.setVisible(false);
 		newFamilyForm.setVisible(false);
+		news.setVisible(false);
 	}
 
 
@@ -118,6 +122,11 @@ public class UserProfileLayout extends HorizontalLayout {
 		hideFamily.setVisible(true);
 		addFamily.setVisible(true);
 		joinFamily.setVisible(true);
+	}
+	
+	public void setBlogBtnSelected(){
+		resetFields();
+		news.setVisible(true);
 	}
 
 

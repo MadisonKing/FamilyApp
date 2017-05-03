@@ -253,6 +253,7 @@ public class MyUI extends UI {
     	userProfile.getMenu().getLogout().addClickListener(new LogoutBtnListener());
     	userProfile.getMenu().getFamilies().addClickListener(new FamiliesBtnListener());
     	userProfile.getMenu().getHelp().addClickListener(new HelpBtnListener());
+    	userProfile.getMenu().getBlog().addClickListener(new BlogBtnListener());
     }
     
     public void addSettingsWindowListeners(SettingsWindow settingsWindow)
@@ -484,6 +485,20 @@ public class MyUI extends UI {
 			userProfile.setFamiliesBtnSelected();
 
 		}
+	}
+	
+	public class BlogBtnListener implements ClickListener{
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			UserProfileLayout userProfile= new UserProfileLayout(currentUser);
+			addUserProfileListeners(userProfile);
+			setContent(userProfile);
+			userProfile.setBlogBtnSelected();
+			
+		}
+		
 	}
     
 
