@@ -136,6 +136,7 @@ public class UserProfileLayout extends HorizontalLayout {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			// TODO Auto-generated method stub
+			resetFields();
 			newFamilyWindow.setVisible(false);
 			newFamilyForm.setVisible(false);
 			familiesGrid.setVisible(true);

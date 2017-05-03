@@ -1,6 +1,7 @@
 package com.familyApp.FamilyApp;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
@@ -18,7 +19,7 @@ public class NewsLayout extends VerticalLayout {
 	
 	//VerticalLayout layout= new VerticalLayout();
 	
-	Panel panel=new Panel("Recent Posts");
+	protected Grid<News> grid= new Grid<>(News.class);
 	
 	
 	public NewsLayout(User user){
@@ -29,7 +30,7 @@ public class NewsLayout extends VerticalLayout {
 	private void initLayout(){
 		HorizontalLayout buttons= new HorizontalLayout();
 		buttons.addComponents(post, cancel);
-		addComponents(panel, buttons);
+		addComponents(grid, buttons);
 	}
 	
 }
