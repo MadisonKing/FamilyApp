@@ -44,16 +44,22 @@ public class UserProfileLayout extends HorizontalLayout {
 
 	VerticalLayout layout = new VerticalLayout();
 	
-	CreateFamilyWindow newFamilyWindow= new CreateFamilyWindow(user);
+	FamilyForm newFamilyForm;
 	
-	FamilyForm newFamilyForm= new FamilyForm(user);
+	NewsLayout news;
 	
-	NewsLayout news= new NewsLayout(user);
+	CreateFamilyWindow newFamilyWindow;
+	
+
 
 
 
 	public UserProfileLayout(User user){
 		this.user = user;
+		newFamilyForm= new FamilyForm(user);
+		news= new NewsLayout(user);
+		newFamilyWindow= new CreateFamilyWindow(user);
+
 		initLayout();
 
 	}
