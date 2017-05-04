@@ -50,7 +50,7 @@ public class CreateFamilyWindow extends VerticalLayout{
 		HorizontalLayout buttons = new HorizontalLayout();
 		buttons.addComponents(create);
 		addComponents(familyName, buttons);
-		create.addClickListener(new CreateBtnListener());
+	//	create.addClickListener(new CreateBtnListener());
 		
 		
 
@@ -88,19 +88,6 @@ public class CreateFamilyWindow extends VerticalLayout{
 		
 	}
 	
-	public class CreateBtnListener implements ClickListener {
-
-		@Override
-		public void buttonClick(ClickEvent event) {
-			// TODO Auto-generated method stub
-			Pin pin= new Pin(familyName.getValue());
-			Family family= new Family(familyName.getValue(), pin);
-			user.getFamilys().add(family);
-			user.getFamilies().add(pin);
-			
-			
-		}
-		
-	}
+	
 	
 }

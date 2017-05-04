@@ -17,7 +17,7 @@ public class Family {
 	private ArrayList<User> users;// = new ArrayList<User>();
 	
 	/** Pin number associated to each family*/
-	private Pin pin;
+	private int pin;
 	
 	
 	
@@ -30,41 +30,53 @@ public class Family {
 	//	this.pin = (int) Math.random();
 		this.name = "";
 		this.users = new ArrayList<User>();
+		this.pin = 0;
 	}
 
 	/**
 	 * @param pin
-	*/
+	*//*
 	public Family(Pin pin) {
 		super();
 		this.pin = pin;
 		this.name = "";
 		this.users = new ArrayList<User> ();
 	}
-
-	/**
+	*/
+	public Family(String name){
+		//super();
+		this.name = name;
+		this.users = new ArrayList<User> ();
+		this.pin = 0;
+	}
+/*
+	*//**
 	 * @param name
 	 * @param pin
-	 */
+	 *//*
 	public Family(String name, Pin pin) {
 		super();
 		this.name = name;
 		this.pin = pin;
 		this.users = new ArrayList<User>();
 	}
+*/
 
 
-
-	/**
+/*	*//**
 	 * @param name
 	 * @param users
 	 * @param pin
-	 */
+	 *//*
 	public Family(String name, ArrayList<User> users, Pin pin) {
 		super();
 		this.name = name;
 		this.users = users;
 		this.pin = pin;
+	}*/
+	
+	public void setPin(int num){
+		pin = num;
 	}
 
 	/**
@@ -99,20 +111,20 @@ public class Family {
 		users.add(user);
 	}
 
-	/**
+/*	*//**
 	 * @return the pin
-	 */
+	 *//*
 	public Pin getPin() {
 		return pin;
-	}
+	}*/
 
 	/**
 	 * 
 	 */
-	public void setPin(Pin pin) {
+/*	public void setPin(Pin pin) {
 		this.pin = pin;
 	}
-
+*/
 
 	
 	public void display(){

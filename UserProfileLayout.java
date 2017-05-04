@@ -1,3 +1,4 @@
+
 package com.familyApp.FamilyApp;
 
 
@@ -44,14 +45,22 @@ public class UserProfileLayout extends HorizontalLayout {
 
 	VerticalLayout layout = new VerticalLayout();
 	
-	CreateFamilyWindow newFamilyWindow= new CreateFamilyWindow(user);
+	FamilyForm newFamilyForm;
 	
-	FamilyForm newFamilyForm= new FamilyForm(user);
+	NewsLayout news;
+	
+//	CreateFamilyWindow newFamilyWindow;
+	
+
 
 
 
 	public UserProfileLayout(User user){
 		this.user = user;
+		newFamilyForm= new FamilyForm(user);
+		news= new NewsLayout(user);
+	//	newFamilyWindow= new CreateFamilyWindow(user);
+
 		initLayout();
 
 	}
@@ -63,13 +72,15 @@ public class UserProfileLayout extends HorizontalLayout {
 		hideFamily.setVisible(false);
 		addFamily.setVisible(false);
 		joinFamily.setVisible(false);
-		layout.addComponents(userName, buttons, familiesGrid, newFamilyWindow, newFamilyForm);
+		layout.addComponents(userName, buttons, familiesGrid, newFamilyForm, news);
 		userName.setValue(user.getFirstName() + '\n' + user.getLastName() + '\n' + user.getEmail());
 		addComponents(menu, layout);
 		familiesGrid.setVisible(false);
-		newFamilyWindow.setVisible(false);
+		news.setVisible(false);
+		//newFamilyWindow.setVisible(false);
 		newFamilyForm.setVisible(false);
 		familiesGrid.setData(user.getFamilies());
+		familiesGrid.removeColumn(familiesGrid.getColumns().get(1));
 		families.addClickListener(new FamiliesBtnListener());
 		addFamily.addClickListener(new AddFamilyBtnListener());
 		joinFamily.addClickListener(new JoinFamilyBtnListener());
@@ -83,8 +94,9 @@ public class UserProfileLayout extends HorizontalLayout {
 		hideFamily.setVisible(false);
 		addFamily.setVisible(false);
 		joinFamily.setVisible(false);
-		newFamilyWindow.setVisible(false);
+		//newFamilyWindow.setVisible(false);
 		newFamilyForm.setVisible(false);
+		news.setVisible(false);
 	}
 
 
@@ -96,6 +108,9 @@ public class UserProfileLayout extends HorizontalLayout {
 		return addFamily;
 	}
 
+	public VerticalLayout getLayout(){
+		return layout;
+	}
 
 
 
@@ -107,17 +122,26 @@ public class UserProfileLayout extends HorizontalLayout {
 	}
 
 	
+	public Grid<Family> getGrid(){
+		return familiesGrid;
+	}
+	
 	public void setGrid(List<Family> list){
 		familiesGrid.setItems(list);
 	}
 	
 	public void setFamiliesBtnSelected(){
-		newFamilyWindow.setVisible(false);
+		//newFamilyWindow.setVisible(false);
 		newFamilyForm.setVisible(false);
 		familiesGrid.setVisible(true);
 		hideFamily.setVisible(true);
 		addFamily.setVisible(true);
 		joinFamily.setVisible(true);
+	}
+	
+	public void setBlogBtnSelected(){
+		resetFields();
+		news.setVisible(true);
 	}
 
 
@@ -127,7 +151,8 @@ public class UserProfileLayout extends HorizontalLayout {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			// TODO Auto-generated method stub
-			newFamilyWindow.setVisible(false);
+			resetFields();
+			//newFamilyWindow.setVisible(false);
 			newFamilyForm.setVisible(false);
 			familiesGrid.setVisible(true);
 			hideFamily.setVisible(true);
@@ -137,30 +162,30 @@ public class UserProfileLayout extends HorizontalLayout {
 		}
 
 	}
-
+	
 	public class AddFamilyBtnListener implements ClickListener{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
 			// TODO Auto-generated method stub
 			newFamilyForm.setVisible(false);
-			familiesGrid.setVisible(false);
-			newFamilyWindow.setVisible(true);
-
-
+			familiesGrid.setVisible(true);
 			
+		//	newFamilyWindow.setVisible(true);			
 
 		}
 
 	}
+	
+
 	
 	public class JoinFamilyBtnListener implements ClickListener{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
 			// TODO Auto-generated method stub
-			newFamilyWindow.setVisible(false);
-			familiesGrid.setVisible(false);
+		//	newFamilyWindow.setVisible(false);
+		//	familiesGrid.setVisible(false);
 			newFamilyForm.setVisible(true);
 			//int fampin=Integer.parseInt(newFamilyWindow.getPinReveal().getCaption());
 			

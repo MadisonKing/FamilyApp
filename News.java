@@ -9,16 +9,16 @@ public class News {
 	private String content;
 	
 	/**User that posted the news content */
-	private User owner;
+	private String owner;
 
 	/**
 	 * @param content
 	 * @param owner
 	 */
-	public News(String content, User owner) {
+	public News(String content, User user) {
 		super();
 		this.content = content;
-		this.owner = owner;
+		this.owner = user.getFirstName();
 	}
 
 	/**
@@ -46,14 +46,14 @@ public class News {
 	/**
 	 * @return the owner
 	 */
-	public User getOwner() {
+	public String getOwner() {
 		return owner;
 	}
 
 	/**
 	 * @param owner the owner to set
 	 */
-	public void setOwner(User owner) {
+	public void setOwner(String owner) {
 		this.owner = owner;
 	}
 	

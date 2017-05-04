@@ -127,7 +127,16 @@ public class User {
 		this.lastName = lastName;
 	}
 
-
+	public String familiesToString(){
+		String temp = "";
+		for(int i = 0; i < families.size(); ++i){
+			temp += families.get(i).getPinNumber() + '/';
+		}
+		
+		return temp;
+	}
+	
+	
 	/**
 	 * @return the families
 	 */
@@ -150,8 +159,12 @@ public class User {
 	
 	public void display(){
 		System.out.println(email + '\n' + firstName + '\n' + lastName);
+		System.out.println(familiesToString());
 	}
 
+	public String toString(){
+		return email + ',' + firstName + ',' + lastName +',' + familiesToString() + '\n';
+	}
 
 	
 
