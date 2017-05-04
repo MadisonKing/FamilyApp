@@ -1,5 +1,7 @@
 package com.familyApp.FamilyApp;
 
+import java.util.ArrayList;
+
 /**
  * This class represents the pin number that is attached to a family object
  * the pin number is randomly generated (but we must check that it does not already exist)
@@ -13,6 +15,7 @@ public class Pin {
 	
 	/**family that is attached to pin number */
 	protected Family family;
+	
 
 	/**
 	 * empty constructor that generates pin
@@ -20,7 +23,18 @@ public class Pin {
 	public Pin() {
 		super();
 		this.pinNumber = (int) ((Math.random() + 2) * 1234);
-		family = new Family(this);
+		family = new Family();
+	}
+	
+	public Pin(int pinNumber, Family family){
+		this.pinNumber = pinNumber;
+		this.family = family;
+	}
+	
+	public Pin(int pinNumber, String familyName){
+		this.pinNumber = pinNumber;
+		this.family = new Family(familyName);
+		family.setPin(pinNumber);
 	}
 	
 	/**
@@ -29,7 +43,7 @@ public class Pin {
 	public Pin(String familyName) {
 		super();
 		this.pinNumber = (int) ((Math.random() + 2) * 1234);
-		family = new Family(familyName, this);
+		family = new Family(familyName);
 	}
 
 	/**
@@ -46,6 +60,7 @@ public class Pin {
 		this.pinNumber = pinNumber;
 	}
 
+	
 	/**
 	 * @return the family
 	 */
@@ -64,11 +79,5 @@ public class Pin {
 		System.out.println(pinNumber);
 		family.display();
 	}
-	
-	/*public boolean checkDuplicate(int pin)
-	{
-		if(pinNumber)
-	}*/
-	
 	
 }

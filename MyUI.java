@@ -1,9 +1,16 @@
 package com.familyApp.FamilyApp;
 
+import java.awt.List;
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -45,18 +52,26 @@ public class MyUI extends UI {
 	CreateUserWindow newUserWindow = new CreateUserWindow();
 	LoginWindow loginWindow = new LoginWindow();
 	BackWindow backWindow = new BackWindow();
-	HelpWindow helpWindow = new HelpWindow();
+	
 	User currentUser = new User();
 	Window currentWindow; // This value is to keep track of our current window that is open
 	Window previousWindow; // This value is to keep track of the previous window that we would want to go back to 
 	ArrayList<User> users = new ArrayList<User>();
+	ArrayList<Pin> familyDatabase = new ArrayList<Pin>();
 	SettingsWindow settingsWindow = new SettingsWindow(currentUser);
+	ArrayList<Integer> pinNumbers = new ArrayList<Integer>();
+	CreateFamilyWindow createFamilyWindow = new CreateFamilyWindow(currentUser);
+	UserProfileLayout userProfile;
+	int userIndex;
 	
     @Override
     protected void init(VaadinRequest vaadinRequest) {
     	final GridLayout layout = new GridLayout();
         currentWindow = welcomeWindow;
+        familyDatabase = readFamilyDataBase("familypins.csv");
         users = readUserDataBase("users.csv");
+        
+        
         addWindow(welcomeWindow);
         welcomeWindow.getNewUserBtn().addClickListener(new NewUserBtnListener());
         welcomeWindow.getReturningUserBtn().addClickListener(new ReturningUserBtnListener());
@@ -66,7 +81,7 @@ public class MyUI extends UI {
         loginWindow.getBack().addClickListener(new BackBtnListener());
         loginWindow.getLogin().addClickListener(new LoginBtnListener());
         newUserWindow.getCreate().addClickListener(new CreateAccountBtnListener());
-        
+        createFamilyWindow.getCreate().addClickListener(new CreateFamilyBtnListener());
         
         // TEST: layout.addComponent(new NewsBoard()); (passed)
         // TEST: layout.addComponent(new MenuLayout()); (passed)
@@ -79,10 +94,84 @@ public class MyUI extends UI {
         setContent(layout);
     }
     
+    public void addFamilyToDataBase(Pin pin){
+    	String filename = "familypins.csv";
+    	familyDatabase.add(pin);
+    	//grid.setItems(cds);    	
+    	// TODO Also needs to write to CDCatalog1.csv later
+    	try {
+			FileWriter fw = new FileWriter(filename, true);
+			
+			fw.write(Integer.toString(pin.getPinNumber()));
+			fw.write(",");
+			fw.write(pin.getFamily().getName());
+			//fw.write(",");
+			//fw.write(pin.getLastName());
+		/*	for(int i = 0; i < tempUser.getFamilies().size(); ++i)
+			{
+				fw.write(tempUser.getFamilies().get(i).getPinNumber());
+				fw.write("/");
+			}*/
+			fw.write('\n');
+			fw.flush();
+			fw.close();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    }
+    
+    /**
+     * Generate a new pin number for a new family
+     * @return int pinNumber
+     */
+    public int newPin(){
+    	int pin = generatePinNum();
+		while(pinNumbers.contains(pin)){
+			//System.out.println("newPin() called: " + pin);
+			pin = generatePinNum();
+		}
+		pinNumbers.add(pin);
+		return pin;
+    	
+    }
+    
+    public int generatePinNum(){
+    	int pinNum = (int) ((Math.random() + 2) * 1234);
+    	return pinNum;
+    }
+    
+    
     public ArrayList<Pin> parseFamilies(String string)
     {
+    	
+    	String temp = "";
     	ArrayList<Pin> tempFamilies = new ArrayList<Pin>();
+    	for(int i = 0; i < string.length(); ++i){
+    		if(string.charAt(i) != '/'){
+    			temp += string.charAt(i);
+    		}
+    		else{
+    			Pin tempPin = familyDatabase.get(findPin(Integer.parseInt(temp)));
+    			tempFamilies.add(tempPin);
+    			temp = "";
+    		}
+    	}
+    	
     	return tempFamilies;
+    }
+    
+    public int findPin(int pinNumber){
+    	
+    	int index = -1;
+    	for(int i = 0; i < familyDatabase.size(); ++i){
+    		if(familyDatabase.get(i).getPinNumber() == pinNumber){
+    			index = i;
+    		}
+    	}
+    	 return index;
     }
     public void updateUserDataBase(User tempUser) {
     
@@ -111,6 +200,43 @@ public class MyUI extends UI {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    	
+    }
+    public void editUserEntry(User user)
+    {
+    	users.set(userIndex, currentUser);
+    	String temp;
+    	ArrayList<String> usersToFile = new ArrayList<String>();
+    	for(int i = 0; i < users.size(); ++i)
+    	{
+    		temp = users.get(i).toString();
+    		usersToFile.add(temp);
+    	}
+    	
+    	
+    	try {
+			FileWriter fw = new FileWriter("users.csv",false);
+			fw.write("Email");
+			fw.write(',');
+			fw.write("First");
+			fw.write(',');
+			fw.write("Last");
+			fw.write(',');
+			fw.write("Families");
+			fw.write('\n');
+			
+			for(int i = 0; i < usersToFile.size(); ++i){
+			//	System.out.println(usersToFile.get(i));
+				fw.write(usersToFile.get(i));
+			}
+			
+			fw.flush();
+			fw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
     	
     }
     
@@ -160,6 +286,7 @@ public class MyUI extends UI {
 		        			else if(numCommas == 3){
 		        				last = temp;
 		        				families = line.substring(i + 1, line.length());
+		        				System.out.println(families);
 		        			}
 		        			temp = "";
 		        		}
@@ -167,6 +294,8 @@ public class MyUI extends UI {
 		        	}
 		        	
 		        	User user = new User(email, first, last, parseFamilies(families));
+		        	user.display();
+		        	if(user.getFamilies().isEmpty()) System.out.println("No families");
 		        	temp_users.add(user);
 		        	line = br.readLine();
 		        }
@@ -179,13 +308,20 @@ public class MyUI extends UI {
     	return temp_users;
     }
     
-    public ArrayList<Integer> readFamilyDataBase(String filename)
+    public ArrayList<Pin> readFamilyDataBase(String filename)
     {
-    	ArrayList<Integer> temp_pinNums = new ArrayList<Integer>();
-    	 // Temp variables to keep track of imported cd's title, artist, and genre
-        String pin = "";
-        int pinNumber = 0;
-    	try {
+    	ArrayList<Pin> pins = new ArrayList<Pin>();
+    	ArrayList<Integer> temp_pins = new ArrayList<Integer>();
+    	ArrayList<String> temp_names = new ArrayList<String>();
+   
+    	
+   	 // Temp variables to keep track of imported cd's title, artist, and genre
+       String pinNumber = ""; 
+       String familyName = "";
+       String user = "";
+     
+       
+   	try {
 			BufferedReader br = new BufferedReader(new FileReader(filename));
 			
 			 String line = br.readLine();
@@ -194,11 +330,13 @@ public class MyUI extends UI {
 		        int numCommas = 0;
 		        while(line != null)
 		        {
-		        	pin = "";
+		    //    	ArrayList<String> userNames = new ArrayList<String>();
+		        	pinNumber = "";
+		        	familyName = "";
+		        	user = "";
 		        	temp = "";
 		        	numCommas = 0;
-		        	pinNumber = 0;
-		        	//System.out.println(line);
+		        	
 		        	for(int i = 0; i < line.length(); ++i)
 		        	{       		
 
@@ -211,15 +349,24 @@ public class MyUI extends UI {
 		        			++numCommas;
 		        			if(numCommas == 1)
 		        			{
-		        				pin = temp;
+		        				pinNumber = temp;
+		        			}
+		        			else if (numCommas == 2)
+		        			{
+		        				familyName = temp;
+		        			}
+		        			else if(numCommas == 3){
+		        				familyName = temp;
+		        				//user = line.substring(i + 1, line.length());
 		        			}
 		        			temp = "";
 		        		}
 
 		        	}
 		        	
-		        	pinNumber = Integer.parseInt(pin); 
-		        	temp_pinNums.add(pinNumber);
+		        	temp_names.add(familyName);
+		        	temp_pins.add(Integer.parseInt(pinNumber));
+
 		        	line = br.readLine();
 		        }
 				
@@ -227,8 +374,20 @@ public class MyUI extends UI {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-    	
-    	return temp_pinNums;
+
+   	pinNumbers = temp_pins;
+   	if(!temp_names.isEmpty()){
+   		
+   		for(int i = 0; i < temp_names.size(); ++i){
+   			Family temp_family = new Family(temp_names.get(i));
+   			Pin temp_pin = new Pin(temp_pins.get(i), temp_family);
+   			
+   			pins.add(temp_pin);
+   		}
+   		
+
+   	}
+   	return pins;
     }
     
     public void initNewUserWindow(){
@@ -247,12 +406,17 @@ public class MyUI extends UI {
     
     public void addUserProfileListeners(UserProfileLayout userProfile)
     {
+    	createFamilyWindow.setVisible(false);
+    	userProfile.getLayout().addComponent(createFamilyWindow);
+    	
     	//userProfile.getMenu().getHelp().addClickListener(new HelpBtnListener());
     	userProfile.getMenu().getSettings().addClickListener(new SettingsBtnListener());
     	userProfile.getMenu().getUserProfile().addClickListener(new MyProfileBtnListener());
     	userProfile.getMenu().getLogout().addClickListener(new LogoutBtnListener());
     	userProfile.getMenu().getFamilies().addClickListener(new FamiliesBtnListener());
     	userProfile.getMenu().getHelp().addClickListener(new HelpBtnListener());
+    	userProfile.getMenu().getBlog().addClickListener(new BlogBtnListener());
+    	userProfile.getAddFamilyBtn().addClickListener(new AddFamilyBtnListener());
     }
     
     public void addSettingsWindowListeners(SettingsWindow settingsWindow)
@@ -301,6 +465,23 @@ public class MyUI extends UI {
     	
     }
     
+    public class AddFamilyBtnListener implements ClickListener{
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			//CreateFamilyWindow newFamilyWindow = new CreateFamilyWindow(currentUser);
+			//newFamilyForm.setVisible(false);
+			//familiesGrid.setVisible(false);
+			//newFamilyWindow.setVisible(true);
+			createFamilyWindow.setVisible(true);
+			
+
+		}
+
+	}
+	
+    
     public class CreateAccountBtnListener implements ClickListener {
 
 		@Override
@@ -336,11 +517,13 @@ public class MyUI extends UI {
 			String email = loginWindow.getEmail().getValue();
 			if(findUser(email) != -1) {
 				// TEST: loginWindow.getEmail().setValue("Found");
-				UserProfileLayout userProfile = new UserProfileLayout(users.get(findUser(email)));
+				userProfile = new UserProfileLayout(users.get(findUser(email)));
+				addUserProfileListeners(userProfile);
 				currentWindow.close();
 				setContent(userProfile);
 				addUserProfileListeners(userProfile);
 				currentUser = users.get(findUser(email));
+				userIndex = findUser(email);
 				loginWindow.resetValues();
 				//layout.addComponent(userProfile);
 			}
@@ -403,6 +586,7 @@ public class MyUI extends UI {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			// TODO Auto-generated method stub
+			currentWindow.close();
 			addWindow(welcomeWindow);
 			currentWindow = welcomeWindow;
 			setContent(new VerticalLayout());
@@ -415,7 +599,7 @@ public class MyUI extends UI {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			// TODO Auto-generated method stub
-			UserProfileLayout userProfile = new UserProfileLayout(currentUser);
+			userProfile = new UserProfileLayout(currentUser);
 			addUserProfileListeners(userProfile);
 			setContent(userProfile);
 			
@@ -440,8 +624,22 @@ public class MyUI extends UI {
 
 		@Override
 		public void buttonClick(ClickEvent event) {
+			
+			if(!settingsWindow.getEditEmail().getValue().equalsIgnoreCase(currentUser.getEmail()))
+			{
+				currentUser.setEmail(settingsWindow.getEditEmail().getValue());
+			}
+			if(!settingsWindow.getEditFirst().getValue().equalsIgnoreCase(currentUser.getFirstName())){
+				currentUser.setFirstName(settingsWindow.getEditFirst().getValue());
+			}
+			if(!settingsWindow.getEditLast().getValue().equalsIgnoreCase(currentUser.getLastName())){
+				currentUser.setLastName(settingsWindow.getEditLast().getValue());
+			}
 			// TODO Auto-generated method stub
-			currentUser = settingsWindow.getUser();
+			//currentUser = settingsWindow.getUser();
+			//addUserProfileListeners(userProfile);
+			settingsWindow.close();
+			editUserEntry(currentUser);
 			getContent().setEnabled(true);
 		}
     	
@@ -466,9 +664,10 @@ public class MyUI extends UI {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			// TODO Auto-generated method stub
-			currentWindow = helpWindow;
+			//currentWindow = helpWindow;
+			HelpWindow helpWindow = new HelpWindow();
 			addWindow(helpWindow);
-		    getContent().setEnabled(true);
+		  //  getContent().setEnabled(true);
 		}
 		
 	}
@@ -478,12 +677,54 @@ public class MyUI extends UI {
 		
 		@Override
 		public void buttonClick(ClickEvent event){
-			UserProfileLayout userProfile = new UserProfileLayout(currentUser);
+			userProfile = new UserProfileLayout(currentUser);
 			addUserProfileListeners(userProfile);
 			setContent(userProfile);
 			userProfile.setFamiliesBtnSelected();
 
 		}
+	}
+	
+	public class BlogBtnListener implements ClickListener{
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			UserProfileLayout userProfile= new UserProfileLayout(currentUser);
+			addUserProfileListeners(userProfile);
+			setContent(userProfile);
+			userProfile.setBlogBtnSelected();
+			
+		}
+		
+	}
+	
+	public class CreateFamilyBtnListener implements ClickListener {
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			int pinNum = newPin();
+			/*for(int i = 0; i < pinNumbers.size(); ++i){
+				System.out.println(i + ": " + pinNumbers.get(i));
+			}*/
+			System.out.println("Pin number generated for new family: " + pinNum);
+			Pin pin = new Pin(pinNum, createFamilyWindow.getFamilyName().getValue());
+			System.out.println(pin.getPinNumber());
+			currentUser.getFamilies().add(pin);
+			for(int i = 0; i < currentUser.getFamilies().size(); ++i){
+				System.out.println("user family " + i + ": " + currentUser.getFamilies().get(i).getPinNumber());
+			}
+			currentUser.getFamilys().add(pin.getFamily());
+			//System.out.println(currentUser.familiesToString());
+			userProfile.getGrid().setItems(currentUser.getFamilys());
+			addFamilyToDataBase(pin);
+			createFamilyWindow.setVisible(false);
+			editUserEntry(currentUser);
+			
+			
+		}
+		
 	}
     
 

@@ -55,7 +55,7 @@ public class SettingsWindow extends Window {
 		editEmail.setValue(user.getEmail());
 		HorizontalLayout buttons = new HorizontalLayout();
 		buttons.addComponents(save, back);
-		save.addClickListener(new SaveChangesBtnListener());
+		//save.addClickListener(new SaveChangesBtnListener());
 		layout.addComponents(editFirst,editLast,editEmail, buttons);
 		setContent(layout);
 		
@@ -67,6 +67,7 @@ public class SettingsWindow extends Window {
 	public TextField getEditFirst() {
 		return editFirst;
 	}
+	
 
 	/**
 	 * @return the editLast
@@ -118,24 +119,7 @@ public class SettingsWindow extends Window {
 		return user;
 	}
 	
-	public class SaveChangesBtnListener implements ClickListener {
 
-		@Override
-		public void buttonClick(ClickEvent event) {
-			// TODO Auto-generated method stub
-			if(!editEmail.getValue().equalsIgnoreCase(user.getEmail()))
-			{
-				user.setEmail(editEmail.getValue());
-			}
-			if(!editFirst.getValue().equalsIgnoreCase(user.getFirstName())){
-				user.setFirstName(editFirst.getValue());
-			}
-			if(!editLast.getValue().equalsIgnoreCase(user.getLastName())){
-				user.setLastName(editLast.getValue());
-			}
-		}
-		
-	}
 	
 
 }
